@@ -249,6 +249,14 @@ export default function GuideContent() {
             </tr>
           </tbody>
         </table>
+        <div style={s.calloutInfo}>
+          <div style={s.calloutTitleInfo}>Cómo leer los umbrales</div>
+          Los porcentajes son <strong style={s.strong}>pisos mínimos de capacidad</strong>, no filtros eliminatorios estrictos ni objetivos a maximizar. Un modelo debajo del piso va a devolver output — no se rompe ni se niega. El problema es que ese output va a ser defectuoso más seguido: código con bugs, specs incompletas, decisiones pobres en design. El piso no filtra si el modelo <em>responde</em>, filtra si lo que responde es <strong style={s.strong}>confiable</strong>.
+          <br /><br />
+          <strong style={s.strong}>Ejemplo:</strong> ponés un modelo con SWE-bench Verified de <span style={s.stat}>60%</span> en <span style={s.mono}>apply</span>. Ese modelo resuelve menos de dos tercios de los issues reales que ve. En un flujo SDD eso se traduce en más iteraciones de <span style={s.mono}>verify → corrección → apply</span>, más features con bugs sutiles que pasan tests pero fallan en producción, y más intervención manual. El ahorro en precio por token se te va en ciclos extra y debugging — terminás pagando más caro, no más barato.
+          <br /><br />
+          El tradeoff <strong style={s.strong}>precio/calidad</strong> se resuelve <strong style={s.strong}>después</strong> del filtro, en el paso 3 del proceso de selección — eligiendo entre los modelos que ya pasaron el piso. No bajando el piso.
+        </div>
 
         {/* Límites de los benchmarks */}
         <h3 style={s.h3}>Límites de los benchmarks</h3>
@@ -259,6 +267,7 @@ export default function GuideContent() {
             <li><strong style={s.strong}>No miden token efficiency</strong> — dos modelos con el mismo score pueden consumir cantidades radicalmente distintas</li>
             <li><strong style={s.strong}>No miden estabilidad en flujos largos</strong> — un modelo puede resolver el issue 1 y fallar el 15</li>
             <li><strong style={s.strong}>No miden recuperación de errores</strong> — qué hace cuando se traba, si replanifica o se queda en loop</li>
+            <li><strong style={s.strong}>No miden tool calling bajo contexto largo con MCP</strong> — un modelo con benchmarks altos puede degradar su tool calling cuando el contexto supera cierto umbral o cuando hay muchas tools disponibles. Crítico para flujos con Context7 u otros MCP activos.</li>
           </ul>
         </div>
         <div style={s.calloutInfo}>
@@ -269,17 +278,32 @@ export default function GuideContent() {
         {/* Proceso de selección — 4 pasos */}
         <h3 style={s.h3}>Proceso de selección</h3>
         <div style={s.stepList}>
-          <Step num="1" title="Filtro de mínimos">
-            Descarta candidatos que no cumplen el umbral de benchmarks de la tabla anterior o no soportan tool calling.
+          <Step num="1" title="Asignación por tipo">
+            Identificá el tipo de trabajo de cada fase según la tabla "Criterio por tipo". El tipo determina qué benchmark y qué umbral aplicar.
           </Step>
-          <Step num="2" title="Comparación de los que pasaron">
-            En este orden: <strong style={s.strong}>token efficiency</strong> → <strong style={s.strong}>precio por millón</strong> → <strong style={s.strong}>contexto máximo</strong>. Menos tokens = menos costo real, independiente del precio.
+          <Step num="2" title="Filtro de mínimos">
+            Descartá candidatos que:
+            <ul className="sdd-list" style={{ ...s.ul, marginTop: 6 }}>
+              <li>No cumplen el umbral de benchmarks del tipo asignado</li>
+              <li>No tienen <strong style={s.strong}>tool calling estable</strong> reportado en uso real con MCP (no basta con que el modelo liste "function calling" como feature)</li>
+              <li>No tienen suficiente <strong style={s.strong}>ventana de contexto</strong> para la fase (crítico en <span style={s.mono}>explore</span> sobre repos grandes y <span style={s.mono}>design</span> con specs largas)</li>
+            </ul>
           </Step>
-          <Step num="3" title="Validación con uso real">
-            Reddit (<span style={s.mono}>r/claudedev</span>, <span style={s.mono}>r/localllama</span>) + OpenRouter rankings. Benchmarks altos + reportes negativos = no sirve. Benchmarks medios + reportes positivos = probablemente funciona.
+          <Step num="3" title="Comparación de los que pasaron">
+            En este orden:
+            <ul className="sdd-list" style={{ ...s.ul, marginTop: 6 }}>
+              <li><strong style={s.strong}>Costo por tarea resuelta</strong> según Aider leaderboard cuando el dato exista</li>
+              <li><strong style={s.strong}>Precio por millón de tokens</strong> cuando no exista el dato anterior</li>
+              <li><strong style={s.strong}>Latencia</strong> si la fase es de muchos turnos cortos (Coord)</li>
+            </ul>
           </Step>
-          <Step num="4" title="Asignación por tipo" last>
-            Aplicá el <strong style={s.strong}>criterio ganador</strong> de la tabla "Criterio por tipo" a cada fase, según su tipo de trabajo.
+          <Step num="4" title="Validación con uso real" last>
+            Fuentes útiles según stack:
+            <ul className="sdd-list" style={{ ...s.ul, marginTop: 6, marginBottom: 6 }}>
+              <li><strong style={s.strong}>Modelos comerciales vía API:</strong> <span style={s.mono}>r/ClaudeAI</span>, <span style={s.mono}>r/ChatGPTCoding</span>, OpenRouter rankings, Aider Discord</li>
+              <li><strong style={s.strong}>Modelos self-hosted:</strong> <span style={s.mono}>r/LocalLLaMA</span>, OpenCode discussions</li>
+            </ul>
+            Benchmarks altos + reportes negativos = no sirve. Benchmarks medios + reportes positivos = probablemente funciona.
           </Step>
         </div>
       </div>

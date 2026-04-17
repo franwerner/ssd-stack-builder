@@ -4,8 +4,6 @@ const stacks = [
   {
     name: "FREE",
     color: "#22c55e",
-    costPerFeature: 0,
-    monthly: 0,
     phases: {
       orchestrator: { model: "MiniMax M2.5 :free", input: 0, output: 0 },
       init: { model: "MiniMax M2.5 :free", input: 0, output: 0 },
@@ -24,15 +22,13 @@ const stacks = [
   {
     name: "LOW",
     color: "#3b82f6",
-    costPerFeature: 0.18,
-    monthly: 36,
     phases: {
       orchestrator: { model: "MiniMax M2.5", input: 0.118, output: 0.99 },
       init: { model: "MiniMax M2.5", input: 0.118, output: 0.99 },
       explore: { model: "DeepSeek V3.2", input: 0.26, output: 0.38 },
       propose: { model: "DeepSeek V3.2", input: 0.26, output: 0.38 },
       spec: { model: "DeepSeek V3.2", input: 0.26, output: 0.38 },
-      design: { model: "DeepSeek V3.2", input: 0.26, output: 0.38 },
+      design: { model: "V3.2 Speciale", input: 0.40, output: 1.20  },
       tasks: { model: "DeepSeek V3.2", input: 0.26, output: 0.38 },
       apply: { model: "DeepSeek V3.2", input: 0.26, output: 0.38 },
       verify: { model: "MiniMax M2.5", input: 0.118, output: 0.99 },
@@ -44,15 +40,13 @@ const stacks = [
   {
     name: "LOW-MED",
     color: "#a855f7",
-    costPerFeature: 0.28,
-    monthly: 56,
     phases: {
       orchestrator: { model: "MiniMax M2.5", input: 0.118, output: 0.99 },
       init: { model: "MiniMax M2.5", input: 0.118, output: 0.99 },
       explore: { model: "DeepSeek V3.2", input: 0.26, output: 0.38 },
       propose: { model: "V3.2 Speciale", input: 0.40, output: 1.20 },
       spec: { model: "V3.2 Speciale", input: 0.40, output: 1.20 },
-      design: { model: "V3.2 Speciale", input: 0.40, output: 1.20 },
+      design: { model: "GLM 5.1", input: 0.95, output: 3.15  },
       tasks: { model: "DeepSeek V3.2", input: 0.26, output: 0.38 },
       apply: { model: "DeepSeek V3.2", input: 0.26, output: 0.38 },
       verify: { model: "MiniMax M2.5", input: 0.118, output: 0.99 },
@@ -64,14 +58,12 @@ const stacks = [
   {
     name: "MEDIUM",
     color: "#f59e0b",
-    costPerFeature: 0.30,
-    monthly: 60,
     phases: {
       orchestrator: { model: "MiniMax M2.5", input: 0.118, output: 0.99 },
       init: { model: "MiniMax M2.5", input: 0.118, output: 0.99 },
       explore: { model: "DeepSeek V3.2", input: 0.26, output: 0.38 },
-      propose: { model: "V3.2 Speciale", input: 0.40, output: 1.20 },
-      spec: { model: "V3.2 Speciale", input: 0.40, output: 1.20 },
+      propose: { model: "GLM 5.1", input: 0.95, output: 3.15 },
+      spec: { model: "GLM 5.1", input: 0.95, output: 3.15 },
       design: { model: "GLM 5.1", input: 0.95, output: 3.15 },
       tasks: { model: "DeepSeek V3.2", input: 0.26, output: 0.38 },
       apply: { model: "DeepSeek V3.2", input: 0.26, output: 0.38 },
@@ -84,8 +76,6 @@ const stacks = [
   {
     name: "HIGH",
     color: "#ef4444",
-    costPerFeature: 0.55,
-    monthly: 110,
     phases: {
       orchestrator: { model: "MiniMax M2.7", input: 0.30, output: 1.20 },
       init: { model: "MiniMax M2.5", input: 0.118, output: 0.99 },
@@ -95,7 +85,7 @@ const stacks = [
       design: { model: "GLM 5.1", input: 0.95, output: 3.15 },
       tasks: { model: "V3.2 Speciale", input: 0.40, output: 1.20 },
       apply: { model: "V3.2 Speciale", input: 0.40, output: 1.20 },
-      verify: { model: "DeepSeek V3.2", input: 0.26, output: 0.38 },
+      verify: { model: "MiniMax M2.5", input: 0.118, output: 0.99},
       archive: { model: "MiniMax M2.5", input: 0.118, output: 0.99 },
     },
     limits: "GLM 5.1 en diseño completo • Speciale en ejecución",
@@ -103,8 +93,8 @@ const stacks = [
   },
 ];
 
-const sonnetRef = { costPerFeature: 5.85, monthly: 1170 };
-const opusRef = { costPerFeature: 17.50, monthly: 3500 };
+const sonnetModel = { input: 3.9, output: 19.5 };
+const opusModel = { input: 15, output: 75 };
 
 const modelContext = {
   "MiniMax M2.5 :free": "196K",
@@ -155,12 +145,54 @@ const catColors = {
   reason: { bg: "rgba(168,85,247,0.12)", text: "#c084fc", label: "Razonamiento" },
 };
 
+const phaseTokens = {
+  orchestrator: { input: 8000, output: 2000 },
+  init: { input: 5000, output: 1000 },
+  explore: { input: 15000, output: 5000 },
+  propose: { input: 10000, output: 8000 },
+  spec: { input: 12000, output: 10000 },
+  design: { input: 15000, output: 12000 },
+  tasks: { input: 10000, output: 6000 },
+  apply: { input: 20000, output: 15000 },
+  verify: { input: 10000, output: 3000 },
+  archive: { input: 3000, output: 1000 },
+};
+
+const baseInputTotal = 108000;
+const baseOutputTotal = 63000;
+
+const tokenPresets = {
+  light: { label: "Light", inputTotal: 70000, outputTotal: 40000, desc: "Features chicas" },
+  medium: { label: "Medium", inputTotal: 108000, outputTotal: 63000, desc: "Features modulares" },
+  heavy: { label: "Heavy", inputTotal: 180000, outputTotal: 100000, desc: "Features complejas" },
+};
+
+function calcCostPerFeature(stack, preset) {
+  const inputScale = preset.inputTotal / baseInputTotal;
+  const outputScale = preset.outputTotal / baseOutputTotal;
+  let cost = 0;
+  for (const phase of phaseOrder) {
+    const t = phaseTokens[phase];
+    const m = stack.phases[phase];
+    cost += (t.input * inputScale * m.input + t.output * outputScale * m.output) / 1_000_000;
+  }
+  return cost;
+}
+
+function calcRefCost(model, preset) {
+  return (preset.inputTotal * model.input + preset.outputTotal * model.output) / 1_000_000;
+}
+
 export default function SddComparison() {
   const [selected, setSelected] = useState(null);
   const [featuresPerDay, setFeaturesPerDay] = useState(10);
   const [workDays, setWorkDays] = useState(20);
+  const [tokenPreset, setTokenPreset] = useState("medium");
 
   const totalFeatures = featuresPerDay * workDays;
+  const preset = tokenPresets[tokenPreset];
+  const sonnetCPF = calcRefCost(sonnetModel, preset);
+  const opusCPF = calcRefCost(opusModel, preset);
 
   return (
     <div style={{
@@ -243,6 +275,35 @@ export default function SddComparison() {
         <span style={{ fontSize: 11, color: "var(--text3)" }}>
           = {totalFeatures} features/mes
         </span>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" }}>
+          <label style={{ fontSize: 11, color: "var(--text2)" }}>Complejidad</label>
+          <div style={{ display: "flex", gap: 4 }}>
+            {Object.entries(tokenPresets).map(([key, p]) => (
+              <button
+                key={key}
+                onClick={() => setTokenPreset(key)}
+                style={{
+                  padding: "4px 10px",
+                  fontSize: 10,
+                  fontWeight: tokenPreset === key ? 700 : 400,
+                  fontFamily: "inherit",
+                  background: tokenPreset === key ? "rgba(168,85,247,0.15)" : "var(--surface)",
+                  color: tokenPreset === key ? "#c084fc" : "var(--text3)",
+                  border: `1px solid ${tokenPreset === key ? "rgba(168,85,247,0.3)" : "var(--border)"}`,
+                  borderRadius: 4,
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+          <span style={{ fontSize: 9, color: "var(--text3)" }}>
+            {(preset.inputTotal / 1000).toFixed(0)}K in + {(preset.outputTotal / 1000).toFixed(0)}K out
+          </span>
+        </div>
       </div>
 
       {/* Stack Cards */}
@@ -254,9 +315,10 @@ export default function SddComparison() {
       }}>
         {stacks.map((stack, i) => {
           const isSelected = selected === i;
-          const monthlyCost = (stack.costPerFeature * totalFeatures).toFixed(0);
-          const savingsSonnet = ((1 - stack.costPerFeature / sonnetRef.costPerFeature) * 100).toFixed(0);
-          const savingsOpus = ((1 - stack.costPerFeature / opusRef.costPerFeature) * 100).toFixed(0);
+          const costPerFeature = calcCostPerFeature(stack, preset);
+          const monthlyCost = (costPerFeature * totalFeatures).toFixed(0);
+          const savingsSonnet = ((1 - costPerFeature / sonnetCPF) * 100).toFixed(0);
+          const savingsOpus = ((1 - costPerFeature / opusCPF) * 100).toFixed(0);
 
           return (
             <div
@@ -294,7 +356,7 @@ export default function SddComparison() {
               </div>
 
               <div style={{ fontSize: 28, fontWeight: 700, marginBottom: 2, lineHeight: 1 }}>
-                ${stack.costPerFeature === 0 ? "0" : stack.costPerFeature.toFixed(2)}
+                ${costPerFeature === 0 ? "0" : costPerFeature < 0.01 ? costPerFeature.toFixed(4) : costPerFeature.toFixed(2)}
               </div>
               <div style={{ fontSize: 10, color: "var(--text3)", marginBottom: 16 }}>
                 por feature
@@ -303,13 +365,13 @@ export default function SddComparison() {
               <div style={{
                 fontSize: 18,
                 fontWeight: 600,
-                color: stack.costPerFeature === 0 ? "#22c55e" : "var(--text)",
+                color: costPerFeature === 0 ? "#22c55e" : "var(--text)",
               }}>
                 ${monthlyCost}
                 <span style={{ fontSize: 10, color: "var(--text3)", fontWeight: 400 }}>/mes</span>
               </div>
 
-              {stack.costPerFeature > 0 && (
+              {costPerFeature > 0 && (
                 <div style={{
                   fontSize: 10,
                   color: "#22c55e",
@@ -322,7 +384,7 @@ export default function SddComparison() {
                 </div>
               )}
 
-              {stack.costPerFeature === 0 && (
+              {costPerFeature === 0 && (
                 <div style={{
                   fontSize: 10,
                   color: "#22c55e",
@@ -366,10 +428,10 @@ export default function SddComparison() {
           fontSize: 11,
         }}>
           <span style={{ color: "var(--text3)" }}>
-            Ref: <strong style={{ color: "#f97316" }}>Sonnet 4.6</strong> — $5.85/feature • $3.9/$19.5 per 1M tokens
+            Ref: <strong style={{ color: "#f97316" }}>Sonnet 4.6</strong> — ${sonnetCPF.toFixed(2)}/feature • $3.9/$19.5 per 1M tokens
           </span>
           <span style={{ color: "#f97316", fontWeight: 600 }}>
-            ${(sonnetRef.costPerFeature * totalFeatures).toFixed(0)}/mes
+            ${(sonnetCPF * totalFeatures).toFixed(0)}/mes
           </span>
         </div>
         <div style={{
@@ -383,10 +445,10 @@ export default function SddComparison() {
           fontSize: 11,
         }}>
           <span style={{ color: "var(--text3)" }}>
-            Ref: <strong style={{ color: "#dc2626" }}>Opus 4.6</strong> — $17.50/feature • $15/$75 per 1M tokens
+            Ref: <strong style={{ color: "#dc2626" }}>Opus 4.6</strong> — ${opusCPF.toFixed(2)}/feature • $15/$75 per 1M tokens
           </span>
           <span style={{ color: "#dc2626", fontWeight: 600 }}>
-            ${(opusRef.costPerFeature * totalFeatures).toFixed(0)}/mes
+            ${(opusCPF * totalFeatures).toFixed(0)}/mes
           </span>
         </div>
       </div>
@@ -523,12 +585,12 @@ export default function SddComparison() {
           borderRadius: 8,
           padding: "20px 14px",
         }}>
-          {[...stacks,
-          { name: "Sonnet 4.6", color: "#f97316", costPerFeature: sonnetRef.costPerFeature },
-          { name: "Opus 4.6", color: "#dc2626", costPerFeature: opusRef.costPerFeature },
+          {[...stacks.map(s => ({ ...s, cpf: calcCostPerFeature(s, preset) })),
+          { name: "Sonnet 4.6", color: "#f97316", cpf: sonnetCPF },
+          { name: "Opus 4.6", color: "#dc2626", cpf: opusCPF },
           ].map(s => {
-            const cost = s.costPerFeature * totalFeatures;
-            const maxCost = opusRef.costPerFeature * totalFeatures;
+            const cost = s.cpf * totalFeatures;
+            const maxCost = opusCPF * totalFeatures;
             const width = Math.max((cost / maxCost) * 100, cost === 0 ? 1 : 0.5);
 
             return (

@@ -19,11 +19,11 @@ const s = {
   td: { padding: "10px 12px 10px 0", textAlign: "left", borderBottom: "1px solid rgba(255,255,255,0.03)", color: "var(--text2)", fontSize: 10, lineHeight: 1.45, verticalAlign: "top", wordBreak: "break-word" },
   tdNum: { padding: "10px 12px 10px 0", textAlign: "left", borderBottom: "1px solid rgba(255,255,255,0.03)", color: "var(--text)", fontSize: 10, verticalAlign: "top", fontVariantNumeric: "tabular-nums" },
 
-  // Pills (tipo de trabajo)
+  // Pills (tipo de trabajo) — alineados con catColors en src/data/constants.js
   pill: { display: "inline-block", padding: "2px 7px", borderRadius: 4, fontSize: 9, fontWeight: 700, letterSpacing: "0.03em", textTransform: "uppercase" },
-  pillCoord: { background: "rgba(96,165,250,0.12)", color: "#60a5fa", border: "1px solid rgba(96,165,250,0.3)" },
-  pillReason: { background: "rgba(192,132,252,0.12)", color: "#c084fc", border: "1px solid rgba(192,132,252,0.3)" },
-  pillExec: { background: "rgba(74,222,128,0.12)", color: "#4ade80", border: "1px solid rgba(74,222,128,0.3)" },
+  pillCoord: { background: "rgba(100,116,139,0.12)", color: "#94a3b8", border: "1px solid rgba(100,116,139,0.3)" },
+  pillExec: { background: "rgba(59,130,246,0.12)", color: "#60a5fa", border: "1px solid rgba(59,130,246,0.3)" },
+  pillReason: { background: "rgba(168,85,247,0.12)", color: "#c084fc", border: "1px solid rgba(168,85,247,0.3)" },
 
   // Callouts
   calloutInfo: { background: "rgba(192,132,252,0.05)", borderLeft: "3px solid #c084fc", padding: "10px 14px", borderRadius: "2px 4px 4px 2px", color: "var(--text2)", fontSize: 11, lineHeight: 1.5, marginBottom: 16, marginTop: 4 },
@@ -62,7 +62,7 @@ const listStyles = `
 
 function Pill({ kind }) {
   const variant = kind === "coord" ? s.pillCoord : kind === "reason" ? s.pillReason : s.pillExec;
-  const label = kind === "coord" ? "Coord" : kind === "reason" ? "Razon" : "Ejec";
+  const label = kind === "coord" ? "Coordinación" : kind === "reason" ? "Razonamiento" : "Ejecución";
   return <span style={{ ...s.pill, ...variant }}>{label}</span>;
 }
 
@@ -203,9 +203,9 @@ export default function GuideContent() {
         <h3 style={s.h3}>Criterio por tipo</h3>
         <table style={s.table}>
           <colgroup>
-            <col style={{ width: "12%" }} />
-            <col style={{ width: "22%" }} />
-            <col style={{ width: "36%" }} />
+            <col style={{ width: "15%" }} />
+            <col style={{ width: "18%" }} />
+            <col style={{ width: "37%" }} />
             <col style={{ width: "30%" }} />
           </colgroup>
           <thead>
@@ -221,25 +221,34 @@ export default function GuideContent() {
               <td style={s.td}><Pill kind="coord" /></td>
               <td style={s.td}><span style={s.mono}>orchestrator, init, archive</span></td>
               <td style={s.td}>Sin filtro exigente — la tarea es simple</td>
-              <td style={s.td}>Precio más bajo posible</td>
+              <td style={s.td}>Modelo barato</td>
             </tr>
             <tr>
               <td style={s.td}><Pill kind="reason" /></td>
               <td style={s.td}><span style={s.mono}>propose, spec, design</span></td>
-              <td style={s.td}>SWE-bench Pro <span style={s.threshold}>{">"} 50%</span><br />LiveBench Reasoning (relativo)</td>
-              <td style={s.td}>SWE-bench Pro alto + reportes reales positivos</td>
+              <td style={s.td}>LiveBench Reasoning <span style={s.threshold}>{">"} 70%</span><br />ARC-AGI (indicador direccional)</td>
+              <td style={s.td}>Razonamiento estructurado sin código + reportes reales positivos</td>
             </tr>
             <tr>
               <td style={s.td}><Pill kind="exec" /></td>
-              <td style={s.td}><span style={s.mono}>explore, tasks, apply, verify</span></td>
-              <td style={s.td}>SWE-bench Verified <span style={s.threshold}>{">"} 75%</span><br />Terminal-Bench <span style={s.threshold}>{">"} 50%</span><br />LiveBench Coding (relativo)</td>
+              <td style={s.td}><span style={s.mono}>explore</span></td>
+              <td style={s.td}>RepoQA <span style={s.threshold}>{">"} 80%</span> (NIAH ya está saturado, no discrimina)</td>
+              <td style={s.td}>Comprensión de repo a contexto largo</td>
+            </tr>
+            <tr>
+              <td style={s.td}><Pill kind="exec" /></td>
+              <td style={s.td}><span style={s.mono}>tasks</span></td>
+              <td style={s.td}>LiveBench Reasoning <span style={s.threshold}>{">"} 65%</span><br />PlanBench (saturado, referencial)</td>
+              <td style={s.td}>Descomposición estructurada sin ejecución</td>
+            </tr>
+            <tr>
+              <td style={s.td}><Pill kind="exec" /></td>
+              <td style={s.td}><span style={s.mono}>apply, verify</span></td>
+              <td style={s.td}>SWE-bench Verified <span style={s.threshold}>{">"} 80%</span><br />Terminal-Bench <span style={s.threshold}>{">"} 50%</span></td>
               <td style={s.td}>Verified alto + Terminal-Bench + token efficiency</td>
             </tr>
           </tbody>
         </table>
-        <p style={s.p}>
-          <strong style={s.strong}>GDPval-AA <span style={s.threshold}>Elo {">"} 1400</span></strong> sirve como sanity check del flujo completo si querés validar el stack entero, no un tipo específico.
-        </p>
 
         {/* Límites de los benchmarks */}
         <h3 style={s.h3}>Límites de los benchmarks</h3>

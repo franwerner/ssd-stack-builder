@@ -1,0 +1,121 @@
+{
+  "profile": "franwerner",
+  "github": "https://github.com/franwerner",
+  "stacks": [
+    {
+      "name": "FREE",
+      "color": "#22c55e",
+      "phases": {
+        "orchestrator": { "model": "MiniMax M2.5 :free", "modelId": "minimax/minimax-m2.5:free", "input": 0, "output": 0 },
+        "init": { "model": "MiniMax M2.5 :free", "modelId": "minimax/minimax-m2.5:free", "input": 0, "output": 0 },
+        "explore": { "model": "Gemma 4 31B :free", "modelId": "google/gemma-4-31b-it:free", "input": 0, "output": 0 },
+        "propose": { "model": "GPT-OSS-120B :free", "modelId": "openai/gpt-oss-120b:free", "input": 0, "output": 0 },
+        "spec": { "model": "GPT-OSS-120B :free", "modelId": "openai/gpt-oss-120b:free", "input": 0, "output": 0 },
+        "design": { "model": "GPT-OSS-120B :free", "modelId": "openai/gpt-oss-120b:free", "input": 0, "output": 0 },
+        "tasks": { "model": "Nemotron 3 Super :free", "modelId": "nvidia/nemotron-3-super-120b-a12b:free", "input": 0, "output": 0 },
+        "apply": { "model": "Nemotron 3 Super :free", "modelId": "nvidia/nemotron-3-super-120b-a12b:free", "input": 0, "output": 0 },
+        "verify": { "model": "MiniMax M2.5 :free", "modelId": "minimax/minimax-m2.5:free", "input": 0, "output": 0 },
+        "archive": { "model": "MiniMax M2.5 :free", "modelId": "minimax/minimax-m2.5:free", "input": 0, "output": 0 }
+      },
+      "limits": "200 req/dia por modelo \u2022 Output 8K en M2.5 \u2022 Recolección de datos",
+      "bestFor": "Experimentación, prototipos, aprender SDD"
+    },
+    {
+      "name": "LOW",
+      "color": "#3b82f6",
+      "phases": {
+        "orchestrator": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 },
+        "init": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 },
+        "explore": { "model": "DeepSeek V3.2", "modelId": "deepseek/deepseek-v3.2", "input": 0.26, "output": 0.38 },
+        "propose": { "model": "DeepSeek V3.2", "modelId": "deepseek/deepseek-v3.2", "input": 0.26, "output": 0.38 },
+        "spec": { "model": "DeepSeek V3.2", "modelId": "deepseek/deepseek-v3.2", "input": 0.26, "output": 0.38 },
+        "design": { "model": "V3.2 Speciale", "modelId": "deepseek/deepseek-v3.2-speciale", "input": 0.40, "output": 1.20 },
+        "tasks": { "model": "DeepSeek V3.2", "modelId": "deepseek/deepseek-v3.2", "input": 0.26, "output": 0.38 },
+        "apply": { "model": "DeepSeek V3.2", "modelId": "deepseek/deepseek-v3.2", "input": 0.26, "output": 0.38 },
+        "verify": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 },
+        "archive": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 }
+      },
+      "limits": "Sin rate limits \u2022 Sin recolección de datos",
+      "bestFor": "Features simples, fixes, módulos pequeños"
+    },
+    {
+      "name": "LOW-MED",
+      "color": "#a855f7",
+      "phases": {
+        "orchestrator": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 },
+        "init": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 },
+        "explore": { "model": "DeepSeek V3.2", "modelId": "deepseek/deepseek-v3.2", "input": 0.26, "output": 0.38 },
+        "propose": { "model": "V3.2 Speciale", "modelId": "deepseek/deepseek-v3.2-speciale", "input": 0.40, "output": 1.20 },
+        "spec": { "model": "V3.2 Speciale", "modelId": "deepseek/deepseek-v3.2-speciale", "input": 0.40, "output": 1.20 },
+        "design": { "model": "GLM 5.1", "modelId": "z-ai/glm-5.1", "input": 0.95, "output": 3.15 },
+        "tasks": { "model": "DeepSeek V3.2", "modelId": "deepseek/deepseek-v3.2", "input": 0.26, "output": 0.38 },
+        "apply": { "model": "DeepSeek V3.2", "modelId": "deepseek/deepseek-v3.2", "input": 0.26, "output": 0.38 },
+        "verify": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 },
+        "archive": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 }
+      },
+      "limits": "Sin rate limits \u2022 Speciale en propose/spec/design",
+      "bestFor": "Desarrollo diario, features modulares"
+    },
+    {
+      "name": "MEDIUM",
+      "color": "#f59e0b",
+      "phases": {
+        "orchestrator": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 },
+        "init": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 },
+        "explore": { "model": "DeepSeek V3.2", "modelId": "deepseek/deepseek-v3.2", "input": 0.26, "output": 0.38 },
+        "propose": { "model": "GLM 5.1", "modelId": "z-ai/glm-5.1", "input": 0.95, "output": 3.15 },
+        "spec": { "model": "GLM 5.1", "modelId": "z-ai/glm-5.1", "input": 0.95, "output": 3.15 },
+        "design": { "model": "GLM 5.1", "modelId": "z-ai/glm-5.1", "input": 0.95, "output": 3.15 },
+        "tasks": { "model": "DeepSeek V3.2", "modelId": "deepseek/deepseek-v3.2", "input": 0.26, "output": 0.38 },
+        "apply": { "model": "DeepSeek V3.2", "modelId": "deepseek/deepseek-v3.2", "input": 0.26, "output": 0.38 },
+        "verify": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 },
+        "archive": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 }
+      },
+      "limits": "GLM 5.1 en design \u2022 Speciale en propose/spec",
+      "bestFor": "Features complejas, refactors medianos"
+    },
+    {
+      "name": "HIGH",
+      "color": "#ef4444",
+      "phases": {
+        "orchestrator": { "model": "MiniMax M2.7", "modelId": "minimax/minimax-m2.7", "input": 0.30, "output": 1.20 },
+        "init": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 },
+        "explore": { "model": "V3.2 Speciale", "modelId": "deepseek/deepseek-v3.2-speciale", "input": 0.40, "output": 1.20 },
+        "propose": { "model": "GLM 5.1", "modelId": "z-ai/glm-5.1", "input": 0.95, "output": 3.15 },
+        "spec": { "model": "GLM 5.1", "modelId": "z-ai/glm-5.1", "input": 0.95, "output": 3.15 },
+        "design": { "model": "GLM 5.1", "modelId": "z-ai/glm-5.1", "input": 0.95, "output": 3.15 },
+        "tasks": { "model": "V3.2 Speciale", "modelId": "deepseek/deepseek-v3.2-speciale", "input": 0.40, "output": 1.20 },
+        "apply": { "model": "V3.2 Speciale", "modelId": "deepseek/deepseek-v3.2-speciale", "input": 0.40, "output": 1.20 },
+        "verify": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 },
+        "archive": { "model": "MiniMax M2.5", "modelId": "minimax/minimax-m2.5", "input": 0.118, "output": 0.99 }
+      },
+      "limits": "GLM 5.1 en diseño completo \u2022 Speciale en ejecución",
+      "bestFor": "Arquitectura nueva, sistemas complejos, producción"
+    }
+  ],
+  "referenceModels": [
+    { "name": "Sonnet 4.6", "color": "#f97316", "input": 3.9, "output": 19.5 },
+    { "name": "Opus 4.6", "color": "#dc2626", "input": 15, "output": 75 }
+  ],
+  "modelContext": {
+    "MiniMax M2.5 :free": "196K",
+    "MiniMax M2.5": "196K",
+    "MiniMax M2.7": "196K",
+    "Gemma 4 31B :free": "256K",
+    "GPT-OSS-120B :free": "131K",
+    "Nemotron 3 Super :free": "262K",
+    "DeepSeek V3.2": "163K",
+    "V3.2 Speciale": "163K",
+    "GLM 5.1": "203K"
+  },
+  "modelCatalog": [
+    { "name": "MiniMax M2.5", "price": "$0.118 / $0.99", "tier": "Mecánico", "ctx": "196K" },
+    { "name": "MiniMax M2.7", "price": "$0.30 / $1.20", "tier": "Agentic multi-agent", "ctx": "196K" },
+    { "name": "DeepSeek V3.2", "price": "$0.26 / $0.38", "tier": "Coding GPT-5 class", "ctx": "163K" },
+    { "name": "V3.2 Speciale", "price": "$0.40 / $1.20", "tier": "Reasoning frontier", "ctx": "163K" },
+    { "name": "GLM 5.1", "price": "$0.95 / $3.15", "tier": "#1 SWE-Pro \u2022 8h autónomo", "ctx": "203K" },
+    { "name": "GPT-OSS-120B", "price": "Gratis", "tier": "OpenAI open-weight 120B", "ctx": "131K" },
+    { "name": "Gemma 4 31B", "price": "Gratis", "tier": "Google open-weight", "ctx": "256K" },
+    { "name": "Nemotron 3 Super", "price": "Gratis", "tier": "NVIDIA 120B MoE hybrid", "ctx": "262K" }
+  ]
+}
